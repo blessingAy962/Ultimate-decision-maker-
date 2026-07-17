@@ -1,0 +1,22 @@
+{
+  "name": "Decision Maker",
+  "short_name": "Decide",
+  "description": "The Ultimate Random Decision Wheel",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192/38bdf8/0f172a?text=D",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://via.placeholder.com/512/38bdf8/0f172a?text=D",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

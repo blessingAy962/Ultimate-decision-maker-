@@ -1,0 +1,58 @@
+{
+  "entities": {
+    "user": {
+      "title": "User Profile",
+      "description": "User profile containing statistics and preferences",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100 },
+        "todaySpins": { "type": "integer" },
+        "champion": { "type": "string", "maxLength": 100 },
+        "theme": { "type": "string", "enum": ["light", "dark"] },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "todaySpins", "champion", "updatedAt"]
+    },
+    "spin": {
+      "title": "Spin",
+      "description": "Individual spin history record",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "winner": { "type": "string", "maxLength": 100 },
+        "title": { "type": "string", "maxLength": 100 },
+        "time": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "winner", "title", "time", "timestamp"]
+    },
+    "wheel": {
+      "title": "Saved Wheel",
+      "description": "A saved wheel configuration with options list",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "title": { "type": "string", "maxLength": 100 },
+        "options": {
+          "type": "array"
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "title", "options", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "user",
+      "description": "User profiles"
+    },
+    "/users/{userId}/history/{spinId}": {
+      "schema": "spin",
+      "description": "History of wheel spins per user"
+    },
+    "/users/{userId}/wheels/{wheelId}": {
+      "schema": "wheel",
+      "description": "Custom saved wheels per user"
+    }
+  }
+}

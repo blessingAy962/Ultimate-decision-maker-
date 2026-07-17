@@ -1,0 +1,79 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // 1. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 2. Reusable global helper primitives
+    function isValidId(id) { 
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); 
+    }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    function isSignedIn() { return request.auth != null; }
+    function isOwner(userId) { return isSignedIn() && request.auth.uid == userId; }
+
+    // 3. Entity-specific Validation Blueprints
+    function isValidUser(data) {
+      return data.keys().hasAll(['name', 'todaySpins', 'champion', 'updatedAt'])
+        && data.keys().size() <= 5
+        && data.name is string && data.name.size() <= 100
+        && data.todaySpins is int && data.todaySpins >= 0
+        && data.champion is string && data.champion.size() <= 100
+        && data.updatedAt == request.time;
+    }
+
+    function isValidSpin(data, userId) {
+      return data.keys().hasAll(['userId', 'winner', 'title', 'time', 'timestamp'])
+        && data.keys().size() == 5
+        && data.userId == userId
+        && data.winner is string && data.winner.size() <= 100
+        && data.title is string && data.title.size() <= 100
+        && data.time is string && data.time.size() <= 30
+        && data.timestamp == request.time;
+    }
+
+    function isValidWheel(data, userId) {
+      return data.keys().hasAll(['userId', 'title', 'options', 'createdAt'])
+        && data.keys().size() == 4
+        && data.userId == userId
+        && data.title is string && data.title.size() <= 100
+        && data.options is list
+        && data.options.size() >= 2
+        && data.options.size() <= 12
+        && (data.options.size() > 0 && data.options[0] is string)
+        && data.createdAt == request.time;
+    }
+
+    // 4. Secure Match Blocks
+    match /users/{userId} {
+      allow get: if isOwner(userId) && isValidId(userId);
+      allow create: if isOwner(userId) && isValidId(userId) && isValidUser(incoming());
+      allow update: if isOwner(userId) && isValidId(userId) && isValidUser(incoming()) && (
+        incoming().diff(existing()).affectedKeys().hasOnly(['name', 'todaySpins', 'champion', 'theme', 'updatedAt'])
+      );
+      allow delete: if false;
+
+      match /history/{spinId} {
+        allow get: if isOwner(userId);
+        allow list: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidId(spinId) && isValidSpin(incoming(), userId);
+        allow update: if false; // history records are write-once/immutable
+        allow delete: if isOwner(userId) && isValidId(spinId);
+      }
+
+      match /wheels/{wheelId} {
+        allow get: if isOwner(userId);
+        allow list: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidId(wheelId) && isValidWheel(incoming(), userId);
+        allow update: if isOwner(userId) && isValidId(wheelId) && isValidWheel(incoming(), userId) && (
+          incoming().diff(existing()).affectedKeys().hasOnly(['title', 'options'])
+        );
+        allow delete: if isOwner(userId) && isValidId(wheelId);
+      }
+    }
+  }
+}
