@@ -1,7 +1,7 @@
 {
-  "name": "aura-decision-maker",
+  "name": "aura-ultimate-decision-maker",
   "version": "1.0.0",
-  "description": "AuRA Decision Maker static site server",
+  "description": "AuRA Ultimate Decision Maker static site server",
   "main": "server.js",
   "type": "commonjs",
   "scripts": {
@@ -11,6 +11,7 @@
     "lint": "echo 'No lint step required'"
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "sharp": "^0.35.3"
   }
 }

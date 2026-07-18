@@ -11,9 +11,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>AuRA Decision Maker</title>
+  <title>Ultimate Decision Maker</title>
+  <meta name="description" content="Can't decide? Let the wheel choose. A beautiful, fast, and free decision-making app designed by AuraTech. Perfect for choosing between options in seconds." />
+  <meta name="keywords" content="decision maker, ultimate decision maker, random choice generator, decision wheel, analysis paralysis, spin the wheel, productivity tools, auratech" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://aura-decision-maker.web.app/decision-maker.html" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://aura-decision-maker.web.app/decision-maker.html" />
+  <meta property="og:title" content="Ultimate Decision Maker" />
+  <meta property="og:description" content="Can't decide? Let the wheel choose. A beautiful, fast, and free decision-making app designed by AuraTech. Perfect for choosing between options in seconds." />
+  <meta property="og:image" content="https://lh3.googleusercontent.com/d/1nhDjgxxM-fWaphZS-WLH6naURbSBlTpx" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://aura-decision-maker.web.app/decision-maker.html" />
+  <meta name="twitter:title" content="Ultimate Decision Maker" />
+  <meta name="twitter:description" content="Can't decide? Let the wheel choose. A beautiful, fast, and free decision-making app designed by AuraTech. Perfect for choosing between options in seconds." />
+  <meta name="twitter:image" content="https://lh3.googleusercontent.com/d/1nhDjgxxM-fWaphZS-WLH6naURbSBlTpx" />
+
+  <!-- PWA & Favicon -->
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="./favicon.png" />
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#050816" />
+  <meta name="theme-color" content="#ffffff" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
@@ -818,12 +841,18 @@
 
     <div class="greeting-row" style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; width: 100%;">
       <div class="greeting-pill" id="greetingPill" style="display: none; margin-bottom: 0;"></div>
-      <div id="syncStatusBadge" class="sync-badge" style="display: none; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: 12px; background: rgba(34,211,238,0.1); border: 1px solid rgba(34,211,238,0.2); color: var(--cyan); cursor: pointer;" onclick="openSyncModal()">
-        <span class="sync-dot" style="width: 6px; height: 6px; border-radius: 50%; background: #22d3ee; display: inline-block;"></span>
-        <span id="syncStatusText">Connecting...</span>
+      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <div id="pwaInstallBadge" class="sync-badge" style="display: none; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: 12px; background: rgba(168,85,247,0.15); border: 1px solid rgba(168,85,247,0.3); color: #c084fc; cursor: pointer; transition: all 0.2s;" onclick="triggerPWAInstall()">
+          <span style="font-size: 12px;">📲</span>
+          <span>Install App</span>
+        </div>
+        <div id="syncStatusBadge" class="sync-badge" style="display: none; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: 12px; background: rgba(34,211,238,0.1); border: 1px solid rgba(34,211,238,0.2); color: var(--cyan); cursor: pointer;" onclick="openSyncModal()">
+          <span class="sync-dot" style="width: 6px; height: 6px; border-radius: 50%; background: #22d3ee; display: inline-block;"></span>
+          <span id="syncStatusText">Connecting...</span>
+        </div>
       </div>
     </div>
-    <h1>Decision Maker</h1>
+    <h1>Ultimate Decision Maker</h1>
     <p class="header-sub">Can't decide? Let the wheel choose.</p>
     <input class="wheel-title-input" type="text" id="wheelTitle"
            placeholder="Add a title (e.g. Messi vs Ronaldo)" maxlength="60" />
@@ -1109,9 +1138,9 @@ function clearAll() {
 
 // ── COPY / EXPORT ─────────────────────────────────────────────────
 function exportResult() {
-  const title  = document.getElementById("wheelTitle").value.trim() || "Decision Maker";
+  const title  = document.getElementById("wheelTitle").value.trim() || "Ultimate Decision Maker";
   const winner = resultEl.querySelector("strong")?.textContent || "No spin yet";
-  const text   = `🎯 ${title}\n🏆 Winner: ${winner}\n📋 Options: ${options.join(", ")}\n\nPowered by AuRA Tech Decision Maker\n${APP_URL}`;
+  const text   = `🎯 ${title}\n🏆 Winner: ${winner}\n📋 Options: ${options.join(", ")}\n\nPowered by AuRA Tech Ultimate Decision Maker\n${APP_URL}`;
   navigator.clipboard.writeText(text)
     .then(()  => showToast("Copied to clipboard! 📋"))
     .catch(()  => showToast("Copy not supported on this browser"));
@@ -1541,9 +1570,62 @@ addBtn.addEventListener("click", addOption);
 newInput.addEventListener("keypress", e => { if (e.key === "Enter") addOption(); });
 spinBtn.addEventListener("click", spinWheel);
 
+let deferredPrompt;
+function initPWA() {
+  // 1. Register Service Worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js')
+      .then((reg) => {
+        console.log('[PWA] Service Worker registered successfully:', reg.scope);
+      })
+      .catch((err) => {
+        console.warn('[PWA] Service Worker registration failed:', err);
+      });
+  }
+
+  // 2. Handle beforeinstallprompt
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    const installBtn = document.getElementById('pwaInstallBadge');
+    if (installBtn) {
+      installBtn.style.display = 'inline-flex';
+    }
+  });
+
+  // 3. Handle appinstalled
+  window.addEventListener('appinstalled', () => {
+    console.log('[PWA] Installed successfully!');
+    const installBtn = document.getElementById('pwaInstallBadge');
+    if (installBtn) {
+      installBtn.style.display = 'none';
+    }
+    showToast('🎉 App installed successfully! Added to your home screen.');
+  });
+}
+
+function triggerPWAInstall() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then((choiceResult) => {
+    if (choiceResult.outcome === 'accepted') {
+      console.log('[PWA] User accepted the install prompt');
+    } else {
+      console.log('[PWA] User dismissed the install prompt');
+    }
+    deferredPrompt = null;
+    const installBtn = document.getElementById('pwaInstallBadge');
+    if (installBtn) {
+      installBtn.style.display = 'none';
+    }
+  });
+}
+window.triggerPWAInstall = triggerPWAInstall;
+
 // Initial bootstrap
 window.onload = function() {
   initApp();
+  initPWA();
 };
 </script>
 </body>

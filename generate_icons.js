@@ -1,0 +1,116 @@
+const fs = require('fs');
+const path = require('path');
+const sharp = require('sharp');
+
+// 1. Define the premium, minimal spin wheel SVG icon
+// Gradient: White, Cyan, Purple. Beautiful, modern, high-contrast.
+const svgIcon = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Background glow gradient -->
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1e1b4b" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#050816" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Main wheel gradient segment 1 -->
+    <linearGradient id="cyanPurple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22d3ee" /> <!-- Cyan -->
+      <stop offset="50%" stop-color="#818cf8" /> <!-- Indigo/Blue -->
+      <stop offset="100%" stop-color="#c084fc" /> <!-- Purple -->
+    </linearGradient>
+
+    <!-- Metallic/white accent gradient -->
+    <linearGradient id="whiteAccent" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#ffffff" />
+    </linearGradient>
+
+    <!-- Glassmorphic shine -->
+    <linearGradient id="shine" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.0" />
+    </linearGradient>
+  </defs>
+
+  <!-- Ambient Glow Background -->
+  <circle cx="256" cy="256" r="240" fill="url(#glow)" />
+
+  <!-- Outer Ring - High Quality Cybernetic/Premium border -->
+  <circle cx="256" cy="256" r="200" fill="none" stroke="url(#cyanPurple)" stroke-width="6" opacity="0.4" />
+  <circle cx="256" cy="256" r="190" fill="none" stroke="url(#whiteAccent)" stroke-width="2" opacity="0.2" />
+
+  <!-- The Wheel Container -->
+  <g transform="translate(0, 0)">
+    <!-- Main Wheel Body -->
+    <circle cx="256" cy="256" r="180" fill="#090d22" stroke="url(#cyanPurple)" stroke-width="4" />
+
+    <!-- Wheel Segments (8 divisions) -->
+    <!-- Segment 1 -->
+    <path d="M256,256 L256,76 A180,180 0 0,1 383.2,128.8 Z" fill="url(#cyanPurple)" opacity="0.15" />
+    <!-- Segment 3 -->
+    <path d="M256,256 L436,256 A180,180 0 0,1 383.2,383.2 Z" fill="url(#cyanPurple)" opacity="0.25" />
+    <!-- Segment 5 -->
+    <path d="M256,256 L256,436 A180,180 0 0,1 128.8,383.2 Z" fill="url(#cyanPurple)" opacity="0.15" />
+    <!-- Segment 7 -->
+    <path d="M256,256 L76,256 A180,180 0 0,1 128.8,128.8 Z" fill="url(#cyanPurple)" opacity="0.25" />
+
+    <!-- Sleek Segment Dividing Lines -->
+    <line x1="256" y1="76" x2="256" y2="436" stroke="url(#whiteAccent)" stroke-width="1.5" opacity="0.3" />
+    <line x1="76" y1="256" x2="436" y2="256" stroke="url(#whiteAccent)" stroke-width="1.5" opacity="0.3" />
+    <line x1="128.8" y1="128.8" x2="383.2" y2="383.2" stroke="url(#whiteAccent)" stroke-width="1.5" opacity="0.3" />
+    <line x1="128.8" y1="383.2" x2="383.2" y2="128.8" stroke="url(#whiteAccent)" stroke-width="1.5" opacity="0.3" />
+
+    <!-- Outer Rim Accents (Ticks) -->
+    <circle cx="256" cy="256" r="174" fill="none" stroke="#ffffff" stroke-width="1" stroke-dasharray="4, 16" opacity="0.5" />
+
+    <!-- Center Hub (The premium metal button) -->
+    <circle cx="256" cy="256" r="48" fill="#111633" stroke="url(#cyanPurple)" stroke-width="3" />
+    <circle cx="256" cy="256" r="40" fill="url(#whiteAccent)" opacity="0.9" />
+    <!-- Center core element -->
+    <circle cx="256" cy="256" r="16" fill="#090d22" stroke="url(#cyanPurple)" stroke-width="2" />
+
+    <!-- Diagonal reflection shine for premium aesthetic -->
+    <path d="M128.8,128.8 C180,80 332,80 383.2,128.8 L256,256 Z" fill="url(#shine)" />
+  </g>
+
+  <!-- Sleek Indicator Pointer (Top Triangle, floating elegantly) -->
+  <path d="M256,44 L272,76 L240,76 Z" fill="url(#whiteAccent)" stroke="#090d22" stroke-width="2" />
+  <circle cx="256" cy="40" r="4" fill="#22d3ee" />
+</svg>
+`.trim();
+
+async function main() {
+  console.log('Generating premium assets...');
+
+  // Write favicon.svg
+  const svgPath = path.join(__dirname, 'favicon.svg');
+  fs.writeFileSync(svgPath, svgIcon);
+  console.log('Saved favicon.svg');
+
+  // PNG outputs configuration
+  const outputs = [
+    { name: 'favicon.png', size: 32 },
+    { name: 'icon-192.png', size: 192 },
+    { name: 'icon-512.png', size: 512 },
+    { name: 'apple-touch-icon.png', size: 180 },
+    { name: 'android-chrome-192x192.png', size: 192 },
+    { name: 'android-chrome-512x512.png', size: 512 }
+  ];
+
+  for (const out of outputs) {
+    const dest = path.join(__dirname, out.name);
+    await sharp(svgPath)
+      .resize(out.size, out.size)
+      .png()
+      .toFile(dest);
+    console.log(`Successfully generated ${out.name} (${out.size}x${out.size})`);
+  }
+
+  console.log('All assets generated successfully!');
+}
+
+main().catch(err => {
+  console.error('Error generating icons:', err);
+  process.exit(1);
+});

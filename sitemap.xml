@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Main Decision Maker Application -->
+  <url>
+    <loc>https://aura-decision-maker.web.app/</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <!-- Guide 1: Tech Stack -->
+  <url>
+    <loc>https://aura-decision-maker.web.app/guides/tech-stack</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Guide 2: Five Minute Rule -->
+  <url>
+    <loc>https://aura-decision-maker.web.app/guides/five-min-rule</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Guide 3: Video Niche -->
+  <url>
+    <loc>https://aura-decision-maker.web.app/guides/video-niche</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Guide 4: Life Choices -->
+  <url>
+    <loc>https://aura-decision-maker.web.app/guides/life-choices</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Guide 5: Digital Pricing -->
+  <url>
+    <loc>https://aura-decision-maker.web.app/guides/digital-pricing</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Guide 6: Daily Routine -->
+  <url>
+    <loc>https://aura-decision-maker.web.app/guides/daily-routine</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Guide 7: Pivot or Kill -->
+  <url>
+    <loc>https://aura-decision-maker.web.app/guides/pivot-or-kill</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Guide 8: AI Delegation -->
+  <url>
+    <loc>https://aura-decision-maker.web.app/guides/ai-delegation</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Guide 9: Platform Trap -->
+  <url>
+    <loc>https://aura-decision-maker.web.app/guides/platform-trap</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Guide 10: Bootstrapping vs Investors -->
+  <url>
+    <loc>https://aura-decision-maker.web.app/guides/bootstrapping</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Guide 11: Naming Dilemma -->
+  <url>
+    <loc>https://aura-decision-maker.web.app/guides/naming-dilemma</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Guide 12: Rest Protocol -->
+  <url>
+    <loc>https://aura-decision-maker.web.app/guides/rest-protocol</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+</urlset>
